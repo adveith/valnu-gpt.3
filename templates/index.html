@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Vulnerability Mitigation Chatbot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e1e;
+            overflow: hidden;
+        }
+        .chatbot-container {
+            display: none; /* Initially hide the chatbot container */
+            position: fixed;
+            top: 20px; /* Position at the top of the page */
+            right: 50%; /* Center horizontally */
+            transform: translateX(50%); /* Center horizontally */
+            z-index: 9999; /* Ensure it appears above other elements */
+            width: 100%; /* Adjust the width as needed */
+            max-width: 500px; /* Adjust the maximum width as needed */
+            background-color: #0d0d0d;
+            border-radius: 0 0 20px 20px; /* Rounded corners on the bottom left */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        .container {
+            max-width: 500px;
+            background-color: #0d0d0d;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        .header {
+            padding: 20px;
+            background-color: #0d0d0d;
+            color: #fff;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        #userInput {
+            width: calc(100% - 80px);
+            padding: 10px;
+            border: none;
+            background-color: #0d0d0d;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+        #userInput::placeholder {
+            color: #999;
+        }
+        #userInput:focus {
+            border: none;
+        }
+        #sendBtn {
+            width: 80px;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #sendBtn:hover {
+            background-color: #0056b3;
+        }
+        #response {
+            padding: 20px;
+            background-color: #0d0d0d;
+            color: #fff;
+            font-size: 16px;
+            height: 300px;
+            overflow-y: auto;
+            margin: 0;
+        }
+        .response-message {
+            margin-bottom: 10px;
+        }
+        .user-message {
+            text-align: right;
+        }
+        .user-message .message-bubble {
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 10px 10px 0 10px;
+            display: inline-block;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+        .bot-message {
+            text-align: left;
+        }
+        .bot-message .message-bubble {
+            background-color: #444;
+            color: #fff;
+            border-radius: 10px 10px 10px 0;
+            display: inline-block;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+        .time {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+        .fa-robot {
+            margin-right: 10px;
+        }
+        #openChatbotBtn {
+            position: fixed;
+            top: 20px; /* Position at the top of the page */
+            right: 20px;
+            z-index: 9999; /* Ensure it appears above other elements */
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbot-container">
+        <div class="border-gradient"></div>
+        <div class="container">
+            <div class="header">
+                <i class="fas fa-robot"></i> Security Vulnerability Mitigation Chatbot
+            </div>
+            <div id="response"></div>
+            <input type="text" id="userInput" placeholder="Enter your query...">
+            <button id="sendBtn" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- Open chatbot button -->
+    <button id="openChatbotBtn">Open Chatbot</button>
+
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById('userInput').value;
+            const responseDiv = document.getElementById('response');
+            const currentTime = new Date().toLocaleTimeString();
+
+            if (userInput) {
+                responseDiv.innerHTML += `
+                    <div class="user-message response-message">
+                        <span class="message-bubble">${userInput}</span>
+                        <div class="time">${currentTime}</div>
+                    </div>`;
+            }
+            
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userInput })
+            });
+            
+            const data = await response.json(); // Parse response as JSON
+            
+            if (data && data.response) { // Check if response contains message
+                responseDiv.innerHTML += `
+                    <div class="bot-message response-message">
+                        <span class="message-bubble">${data.response}</span>
+                        <div class="time">${currentTime}</div>
+                    </div>`;
+            }
+                
+            document.getElementById('userInput').value = '';
+            responseDiv.scrollTop = responseDiv.scrollHeight;
+        }
+        
+        // Get reference to the open chatbot button
+        const openChatbotBtn = document.getElementById('openChatbotBtn');
+        // Get reference to the chatbot container
+        const chatbotContainer = document.querySelector('.chatbot-container');
+
+        // Function to toggle the visibility of the chatbot container
+        function toggleChatbotContainer() {
+            if (chatbotContainer.style.display === 'none') {
+                chatbotContainer.style.display = 'block';
+            } else {
+                chatbotContainer.style.display = 'none';
+            }
+        }
+
+        // Add click event listener to the open chatbot button
+        openChatbotBtn.addEventListener('click', toggleChatbotContainer);
+    </script>
+</body>
+</html>
