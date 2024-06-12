@@ -15,13 +15,16 @@ model = tf.keras.models.load_model('path_to_model')
 analyzer = SentimentIntensityAnalyzer()
 
 # Establish connection to the PostgreSQL database
-conn = psycopg2.connect(
-    dbname="postgres",
-    user="postgres",
-    password="adi",
-    host="localhost",
-    port="5432"
-)
+try:
+    conn = psycopg2.connect(
+        dbname="postgres",
+        user="postgres",
+        password="adi",
+        host="localhost",
+        port="5432"
+    )
+except psycopg2.Error as e:
+    print("Error connecting to the database:", e)
 
 def extract_cwe_id(user_input):
     """
@@ -192,4 +195,3 @@ if __name__ == '__main__':
     while True:
         user_input = input("You: ")
         print("Bot:", chatbot_response(user_input))
-    

@@ -1,0 +1,17 @@
+{
+    "intents": [
+      {
+        "tag": "greeting",
+        "patterns": ["hello", "hi", "hey"]
+      },
+      {
+        "tag": "goodbye",
+        "patterns": ["bye", "see you later", "goodbye"]
+      },
+      {
+        "tag": "query_vulnerability",
+        "patterns": ["What is CWE-123?", "Tell me about CWE-456", "Any details on CWE-789?"]
+      }
+    ]
+  }
+  

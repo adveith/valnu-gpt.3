@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-from chatbot import chatbot_response  # Import the chatbot_response function
+from chatbot import chatbot_response
 
 app = Flask(__name__)
 
@@ -14,8 +14,8 @@ def chat():
         if not user_input:
             return jsonify({"error": "No input provided"}), 400
 
-        response = chatbot_response(user_input)  # Call the chatbot_response function
-        return jsonify({"response": response})  # Return response in JSON format
+        response = chatbot_response(user_input)
+        return jsonify({"response": response})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
