@@ -9,9 +9,16 @@ def home():
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    user_input = request.json.get("message")
-    response = chatbot_response(user_input)  # Call the chatbot_response function
-    return jsonify({"response": response})  # Return response in JSON format
+    try:
+        user_input = request.json.get("message")
+        if not user_input:
+            return jsonify({"error": "No input provided"}), 400
+
+        response = chatbot_response(user_input)  # Call the chatbot_response function
+        return jsonify({"response": response})  # Return response in JSON format
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

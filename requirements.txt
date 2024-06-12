@@ -1,0 +1,6 @@
+Flask==2.0.1
+psycopg2==2.9.1
+openai==0.28.0
+nltk==3.6.3
+tensorflow==2.5.0
+Werkzeug==2.0.1
