@@ -202,3 +202,4 @@ def chatbot_response(user_input):
     except Exception as e:
         print(f"Error occurred: {str(e)}")
         return f"An error occurred: {str(e)}"
+#aj mene office ko chuti mara tha abb sone jaounga me
